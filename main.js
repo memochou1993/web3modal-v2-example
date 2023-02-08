@@ -1,5 +1,4 @@
-import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi'
-import { configureChains, createClient, signMessage } from '@wagmi/core'
+import { configureChains, createClient, signMessage, getAccount } from '@wagmi/core'
 import { goerli, mainnet } from '@wagmi/core/chains'
 import { EthereumClient, modalConnectors, walletConnectProvider } from '@web3modal/ethereum'
 import { Web3Modal } from '@web3modal/html'
@@ -12,7 +11,9 @@ const chains = [mainnet, goerli]
 const { provider } = configureChains(chains, [walletConnectProvider({ projectId })])
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: [...modalConnectors({ appName: 'web3Modal', chains }), new SafeConnector({ chains })],
+  connectors: [
+    ...modalConnectors({ appName: 'web3Modal', chains })
+  ],
   provider
 })
 
@@ -27,6 +28,11 @@ export const web3Modal = new Web3Modal(
   },
   ethereumClient
 )
+
+web3Modal.subscribeModal(async ({ open }) => {
+  const account = getAccount()
+  console.log(account)
+})
 
 document.getElementById('sign-button').onclick = async () => {
   const signature = await signMessage({
