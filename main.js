@@ -21,10 +21,7 @@ const wagmiClient = createClient({
 const ethereumClient = new EthereumClient(wagmiClient, chains)
 export const web3Modal = new Web3Modal(
   {
-    projectId,
-    walletImages: {
-      safe: 'https://pbs.twimg.com/profile_images/1566773491764023297/IvmCdGnM_400x400.jpg'
-    }
+    projectId
   },
   ethereumClient
 )
